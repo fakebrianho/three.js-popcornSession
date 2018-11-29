@@ -5,13 +5,8 @@
     <script src="build/three.js"></script>
     <script src="js/renderers/CanvasRenderer.js"></script>
     <script src="js/renderers/Projector.js"></script>
-    <style>
-      body {
-      margin: 0;
-      overflow: hidden;
-      }
-    </style>
-    <link rel="shortcut icon" href="css/style.css">
+    <script src="js/objects/lensflare.js"></script> 
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <script>
@@ -24,43 +19,88 @@
         const renderer = new THREE.WebGLRenderer();
 
         //new THREE.PerspectiveCamera(field of view, aspect ratio, near plane, far plane)
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 4000);
 
-        var cube;
+        var starField;
+        var mouseX = 0;
+        var mouseY = 0;
+        var bhLight;
+
         init();
-
         function init(){
             
             //Let's reposition our camera to point at the center 
-            camera.position.set (15, 13, 13);
+            camera.position.z = 1200;
             camera.lookAt(scene.position);
-
-            //Alternative Way of setting positions individually
-            //camera.position.x = 15;
-            //camera.position.y = 13;
-            //camera.position.z = 13;
 
             //Let's create a renderer and change the background color and size
             renderer.setClearColor(0x000000, 1.0);
             renderer.setSize(window.innerWidth, window.innerHeight);
 
             //let's add some geometries as lell! 
-            var cubeGeometry = new THREE.BoxGeometry(10 * Math.random(), 10 * Math.random(), 10 * Math.random());
-
-            var cubeMaterial = new THREE.MeshNormalMaterial();
-
-            cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-
-            scene.add(cube);
             document.body.appendChild(renderer.domElement);
+            document.addEventListener('mousemove', onMouseMove, false);
+     //       makeBlackHole();
+            makeParticles();
+        }
+        
+        function onMouseMove(event){
+            mouseX = event.clientX;    
+            mouseY = event.clientY;
+            console.log(mouseX);
+        }
+
+        function makeParticles(){
+            let starTexture = new THREE.TextureLoader().load('assets/images/p2.png');
+            var starsGeometry = new THREE.Geometry();
+            for ( var i = 0; i < 3500; i ++ ) {
+	            var star = new THREE.Vector3();
+            	star.x = THREE.Math.randFloatSpread( 2000 );
+            	star.y = THREE.Math.randFloatSpread( 2000 );
+            	star.z = THREE.Math.randFloatSpread( 2000 );
+	        starsGeometry.vertices.push( star );
+            }
+            const starsMaterial = new THREE.PointsMaterial( { color:  0xffffff, depthTest: true, size: 10.0, map: starTexture, blending: THREE.AdditiveBlending, transparent: true} );
+            starField = new THREE.Points( starsGeometry, starsMaterial );
+            scene.add( starField );            
+    //        flareUp(starTexture); 
             render(); 
         }
         
+    //    function makeBlackHole(){
+     //       //Light the blackhole...rofl
+      ////      bhLight = new THREE.PointLight(0xfffffff, 1);
+        //    bhLight.position.set(90, 0, 90);
+         //   scene.add(bhLight);
+          //  //Make the 'blackhole' and texture it 
+           // let bhGeometry = new THREE.SphereGeometry(75, 32, 32);
+            //let bhTexture = new THREE.TextureLoader().load('assets/images/storm.jpg');
+//            let bhMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, map: bhTexture});
+ //           let bh = new THREE.Mesh(bhGeometry, bhMaterial);
+  //          scene.add(bh);
+   //     }
+
+//        function flareUp(overImage){
+ //           let flareColor = new THREE.Color( 0xff0000 );
+  //          let lensFlare = new THREE.LensFlare( overImage, 90, 0.0, THREE.AdditiveBlending, flareColor );
+   //         let flare1 = new THREE.TextureLoader().load('assets/lensflare/lensflare0.png');
+    //        lensFlare.add(flare1, 90, 0.0, THREE.AdditiveBlending);
+     //       lensFlare.position.copy(bhLight.position);
+      //      scene.add(lensFlare);
+       // }
+        
         function render(){
             renderer.render(scene, camera);
-         //   scene.getObjectByName('cube').rotation.x += 0.05;
-            cube.rotation.x += 0.05;
             requestAnimationFrame(render);
+            let pointCloud = starField.geometry.vertices; 
+            for(let i = 0; i < pointCloud.length; i++){
+                point = pointCloud[i];
+                point.z += mouseY * 0.1;
+                if(point.z > 1300){
+                    point.z = point.z - 1500;
+                }
+                starField.geometry.verticesNeedUpdate = true;
+            }
         }
 
 
@@ -68,4 +108,3 @@
 
   </body>
 </html>
-
