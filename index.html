@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>01.01 - WebGLRenderer - Skeleton</title>
+    <script src="build/three.js"></script>
+    <script src="js/renderers/CanvasRenderer.js"></script>
+    <script src="js/renderers/Projector.js"></script>
+    <style>
+      body {
+      margin: 0;
+      overflow: hidden;
+      }
+    </style>
+    <link rel="shortcut icon" href="css/style.css">
+  </head>
+  <body>
+    <script>
+
+        //First a few constants
+        //Scene to store everything that's going to take place
+        const scene = new THREE.Scene();
+
+        //Renderer to render everything 
+        const renderer = new THREE.WebGLRenderer();
+
+        //new THREE.PerspectiveCamera(field of view, aspect ratio, near plane, far plane)
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var cube;
+        init();
+
+        function init(){
+            
+            //Let's reposition our camera to point at the center 
+            camera.position.set (15, 13, 13);
+            camera.lookAt(scene.position);
+
+            //Alternative Way of setting positions individually
+            //camera.position.x = 15;
+            //camera.position.y = 13;
+            //camera.position.z = 13;
+
+            //Let's create a renderer and change the background color and size
+            renderer.setClearColor(0x000000, 1.0);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            //let's add some geometries as lell! 
+            var cubeGeometry = new THREE.BoxGeometry(10 * Math.random(), 10 * Math.random(), 10 * Math.random());
+
+            var cubeMaterial = new THREE.MeshNormalMaterial();
+
+            cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+            scene.add(cube);
+            document.body.appendChild(renderer.domElement);
+            render(); 
+        }
+        
+        function render(){
+            renderer.render(scene, camera);
+         //   scene.getObjectByName('cube').rotation.x += 0.05;
+            cube.rotation.x += 0.05;
+            requestAnimationFrame(render);
+        }
+
+
+    </script>
+
+  </body>
+</html>
+
