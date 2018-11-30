@@ -5,7 +5,6 @@
     <script src="build/three.js"></script>
     <script src="js/renderers/CanvasRenderer.js"></script>
     <script src="js/renderers/Projector.js"></script>
-    <script src="js/objects/lensflare.js"></script> 
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
@@ -40,7 +39,6 @@
             //let's add some geometries as lell! 
             document.body.appendChild(renderer.domElement);
             document.addEventListener('mousemove', onMouseMove, false);
-     //       makeBlackHole();
             makeParticles();
         }
         
@@ -63,31 +61,8 @@
             const starsMaterial = new THREE.PointsMaterial( { color:  0xffffff, depthTest: true, size: 10.0, map: starTexture, blending: THREE.AdditiveBlending, transparent: true} );
             starField = new THREE.Points( starsGeometry, starsMaterial );
             scene.add( starField );            
-    //        flareUp(starTexture); 
             render(); 
         }
-        
-    //    function makeBlackHole(){
-     //       //Light the blackhole...rofl
-      ////      bhLight = new THREE.PointLight(0xfffffff, 1);
-        //    bhLight.position.set(90, 0, 90);
-         //   scene.add(bhLight);
-          //  //Make the 'blackhole' and texture it 
-           // let bhGeometry = new THREE.SphereGeometry(75, 32, 32);
-            //let bhTexture = new THREE.TextureLoader().load('assets/images/storm.jpg');
-//            let bhMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, map: bhTexture});
- //           let bh = new THREE.Mesh(bhGeometry, bhMaterial);
-  //          scene.add(bh);
-   //     }
-
-//        function flareUp(overImage){
- //           let flareColor = new THREE.Color( 0xff0000 );
-  //          let lensFlare = new THREE.LensFlare( overImage, 90, 0.0, THREE.AdditiveBlending, flareColor );
-   //         let flare1 = new THREE.TextureLoader().load('assets/lensflare/lensflare0.png');
-    //        lensFlare.add(flare1, 90, 0.0, THREE.AdditiveBlending);
-     //       lensFlare.position.copy(bhLight.position);
-      //      scene.add(lensFlare);
-       // }
         
         function render(){
             renderer.render(scene, camera);
