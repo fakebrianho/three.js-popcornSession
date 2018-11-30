@@ -126,6 +126,8 @@ void main()
         const clock = new THREE.Clock();
         const controls = new THREE.OrbitControls( camera, renderer.domElement );
         const bloomPass = new THREE.UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+
+        var rad;
         var bG;
         var uniforms;
         var ball;
@@ -161,7 +163,7 @@ void main()
             composer.addPass( renderScene );
             composer.addPass( bloomPass );
             
-
+            rad = window.innerHeight / 2; 
 
             //let's add some geometries as lell! 
             document.body.appendChild(renderer.domElement);
@@ -193,7 +195,8 @@ void main()
             starField.rotSpeed = [];
                     for(p = 0; p < 500; p ++){
                                 starField.angle[p] = (Math.random() * Math.PI);
-                                starField.distance[p] = (Math.random() * 2000) - 1000;
+                                starField.distance[p] = (Math.random() * 1500) - 750;
+//                                starField.distance[p] = 00;
                                 starField.rotSpeed[p] = (0.05);
                             }
             scene.add( starField );            
@@ -288,7 +291,6 @@ void main()
         }
         
         function render(timestamp){
-            //renderer.render(scene, camera);
             requestAnimationFrame(render);
 			uniforms.time.value = timestamp / 1000;
             composer.render();
@@ -307,8 +309,8 @@ void main()
                 distance = distances[i];
                 vert = verts[i];
                 angle = angles[i];
-                vert.x = distance * Math.cos(angle);
-                vert.y = distance * Math.sin(angle);
+                vert.x = (distance * Math.cos(angle));
+                vert.y = (distance * Math.sin(angle));
                 vert.z -= mouseY * 0.02;
                 if(vert.z < 0){
                     vert.z = vert.z + 1500;
@@ -318,7 +320,6 @@ void main()
 	        let delta = clock.getDelta();
 	        customUniforms.time.value += delta;
             group.rotation.z -= 0.008;
- 
         }
     </script>
   </body>
